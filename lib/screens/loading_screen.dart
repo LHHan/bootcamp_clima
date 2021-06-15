@@ -1,6 +1,8 @@
+import 'package:bootcamp_clima/screens/location_screen.dart';
 import 'package:bootcamp_clima/services/location.dart';
 import 'package:bootcamp_clima/services/networking.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 const apiKey = 'e1c494c8f27d2bc4ba2cc821ee1d4bca';
 
@@ -27,19 +29,28 @@ class _LoadingScreenState extends State<LoadingScreen> {
 
     NetworkHelper networkHelper = NetworkHelper(
       url: Uri.https('samples.openweathermap.org', '/data/2.5/weather', {
-        'lat': latitude,
-        'lon': longitude,
-        'appid': apiKey,
+        'lat': latitude.toString(),
+        'lon': longitude.toString(),
+        'appid': apiKey.toString(),
       }),
     );
 
     var weatherData = await networkHelper.getData();
-  }
 
-  void getData() async {}
+    Navigator.push(context, MaterialPageRoute(builder: (context) {
+      return LocationScreen();
+    }));
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(
+      body: Center(
+        child: const SpinKitDoubleBounce(
+          color: Colors.white,
+          size: 100.0,
+        ),
+      ),
+    );
   }
 }
