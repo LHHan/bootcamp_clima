@@ -1,3 +1,4 @@
+import 'package:bootcamp_clima/screens/city_screen.dart';
 import 'package:bootcamp_clima/services/weather.dart';
 import 'package:flutter/material.dart';
 import 'package:bootcamp_clima/utilities/constants.dart';
@@ -64,8 +65,7 @@ class _LocationScreenState extends State<LocationScreen> {
                 children: <Widget>[
                   TextButton(
                     onPressed: () async {
-                      var weatherData =
-                          await WeatherModel().getLocationWeather();
+                      var weatherData = await weather.getLocationWeather();
                       updateUI(weatherData);
                     },
                     child: Icon(
@@ -75,7 +75,17 @@ class _LocationScreenState extends State<LocationScreen> {
                     ),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      var typedName = await Navigator.push(context,
+                          MaterialPageRoute(builder: (context) {
+                        return CityScreen();
+                      }));
+                      if (typedName != null) {
+                        var weatherData =
+                            await weather.getCityNameWeather(typedName);
+                        updateUI(weatherData);
+                      }
+                    },
                     child: Icon(
                       Icons.location_city,
                       size: 50.0,
@@ -84,23 +94,25 @@ class _LocationScreenState extends State<LocationScreen> {
                   ),
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 15.0),
-                child: Row(
-                  children: <Widget>[
-                    Text(
-                      '$temperature°',
-                      style: kTempTextStyle,
-                    ),
-                    Text(
-                      '$weatherIcon',
-                      style: kConditionTextStyle,
-                    ),
-                  ],
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 15.0),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        '$temperature°',
+                        style: kTempTextStyle,
+                      ),
+                      Text(
+                        '$weatherIcon',
+                        style: kConditionTextStyle,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(right: 15.0),
+                padding: EdgeInsets.only(right: 15.0, bottom: 10.0),
                 child: Text(
                   '$weatherMessage in $cityName!',
                   textAlign: TextAlign.right,

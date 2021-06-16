@@ -9,10 +9,24 @@ const unencodedPathOpenWeatherMapURL = '/data/2.5/weather';
 const unitOfMeasurement = 'metric';
 
 class WeatherModel {
+  Future<dynamic> getCityNameWeather(String cityName) async {
+    NetworkHelper networkHelper = NetworkHelper(
+      url: Uri.https(
+          authorityOpenWeatherMapURL, unencodedPathOpenWeatherMapURL, {
+        'q': cityName,
+        'appid': apiKey,
+        'units': unitOfMeasurement,
+      }),
+    );
+
+    var weatherData = await networkHelper.getData();
+
+    return weatherData;
+  }
+
   Future<dynamic> getLocationWeather() async {
     Location location = new Location();
     await location.getCurrentLocation();
-
     NetworkHelper networkHelper = NetworkHelper(
       url: Uri.https(
           authorityOpenWeatherMapURL, unencodedPathOpenWeatherMapURL, {
